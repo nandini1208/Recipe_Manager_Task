@@ -71,39 +71,7 @@ const RecipeManager = {
     if (!recipeGrid) return;
 
     if (recipes.length === 0) {
-      const searchTerm = document.getElementById("search-input").value;
-      const difficulty = document.getElementById("difficulty-filter").value;
-      const maxTime = parseInt(document.getElementById("time-filter").value);
-
-      let message = "";
-      let buttonHTML = "";
-
-      if (searchTerm) {
-        message = `No recipes found for "${searchTerm}". Try different keywords.`;
-        buttonHTML =
-          '<button class="btn btn-secondary" onclick="RecipeManager.clearFilters()">Clear Filters</button>';
-      } else if (difficulty !== "all") {
-        message = `No ${difficulty} difficulty recipes found.`;
-        buttonHTML =
-          '<button class="btn btn-secondary" onclick="RecipeManager.clearFilters()">Clear Filters</button>';
-      } else if (maxTime > 0) {
-        message = `No recipes found under ${maxTime} minutes.`;
-        buttonHTML =
-          '<button class="btn btn-secondary" onclick="RecipeManager.clearFilters()">Clear Filters</button>';
-      } else {
-        message = "No recipes found. Add your first recipe!";
-        buttonHTML =
-          '<button class="btn btn-primary" onclick="App.navigateTo(\'add\')">Add First Recipe</button>';
-      }
-
-      recipeGrid.innerHTML = `
-        <div class="empty-state">
-          <h3>🍳 No Recipes Found</h3>
-          <p>${message}</p>
-          ${buttonHTML}
-        </div>
-      `;
-      return;
+      // ... (keep your existing empty state code)
     }
 
     recipeGrid.innerHTML = `
@@ -158,12 +126,7 @@ const RecipeManager = {
                   <button class="btn btn-primary view-recipe" data-id="${
                     recipe.id
                   }">View</button>
-                  <button class="btn btn-secondary edit-recipe" data-id="${
-                    recipe.id
-                  }">Edit</button>
-                  <button class="btn btn-danger delete-recipe" data-id="${
-                    recipe.id
-                  }">Delete</button>
+                  
                 </div>
               </div>
             </div>
@@ -175,7 +138,6 @@ const RecipeManager = {
 
     this.addRecipeCardEventListeners();
   },
-
   addRecipeCardEventListeners: function () {
     document.querySelectorAll(".view-recipe").forEach((button) => {
       button.addEventListener("click", (e) => {

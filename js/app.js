@@ -519,3 +519,25 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+// Image path debugger
+function debugImagePaths() {
+  console.log("=== IMAGE PATH DEBUGGER ===");
+
+  const images = document.querySelectorAll("img");
+  images.forEach((img, index) => {
+    const imgPath = img.src;
+    console.log(`Image ${index + 1}: ${imgPath}`);
+
+    // Check if it's a local file
+    if (imgPath.includes("file://")) {
+      console.error("❌ LOCAL FILE PATH - May not work in browsers");
+    } else if (imgPath.includes("http")) {
+      console.log("✅ WEB URL - Should work");
+    } else {
+      console.log("📍 RELATIVE PATH - Check file exists");
+    }
+  });
+}
+
+// Run when page loads
+document.addEventListener("DOMContentLoaded", debugImagePaths);
