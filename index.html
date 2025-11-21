@@ -9,17 +9,31 @@
   <body>
     <header>
       <div class="container">
-        <h1>🍳 Nandini's Menu Repository</h1>
-        <nav>
-          <ul>
-            <li>
-              <a href="#home" class="nav-link active" data-page="home">Home</a>
-            </li>
-            <li>
-              <a href="#add" class="nav-link" data-page="add">Add Recipe</a>
-            </li>
-          </ul>
-        </nav>
+        <div class="header-content">
+          <div class="logo-section">
+            <div class="logo-icon">🍳</div>
+            <div class="logo-text">
+              <h1 class="header-title">Nandini's Menu Repository</h1>
+              <p class="header-subtitle">Culinary Creations & Kitchen Magic</p>
+            </div>
+          </div>
+          <nav>
+            <ul>
+              <li>
+                <a href="#home" class="nav-link active" data-page="home">
+                  <span class="nav-icon">🏠</span>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="#add" class="nav-link" data-page="add">
+                  <span class="nav-icon">➕</span>
+                  Add Recipe
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
       </div>
     </header>
 
@@ -82,8 +96,14 @@
             </div>
 
             <div class="form-group">
-              <label for="cook-time">Cook Time (minutes) *</label>
-              <input type="number" id="cook-time" min="1" required />
+              <label for="cook-time">Cook Time (minutes)</label>
+              <input
+                type="number"
+                id="cook-time"
+                min="0"
+                placeholder="0 for no-cook recipes"
+              />
+
               <div class="error-message" id="cook-time-error"></div>
             </div>
 
@@ -170,22 +190,32 @@
               share your favorite culinary creations. From quick weekday meals
               to elaborate weekend feasts.
             </p>
-            <div class="social-links">
-              <a href="#" title="Facebook">f</a>
-              <a href="#" title="Instagram">ig</a>
-              <a href="#" title="Pinterest">p</a>
-              <a href="#" title="Twitter">t</a>
-            </div>
           </div>
 
           <div class="footer-section">
             <h3>Quick Links</h3>
             <ul class="footer-links">
-              <li><a href="#home">All Recipes</a></li>
-              <li><a href="#add">Add New Recipe</a></li>
-              <li><a href="#">Easy Recipes</a></li>
-              <li><a href="#">Quick Meals</a></li>
-              <li><a href="#">Desserts</a></li>
+              <li>
+                <a href="#all-recipes" class="quick-link" data-filter="all"
+                  >All Recipes</a
+                >
+              </li>
+              <li>
+                <a href="#add-recipe" class="quick-link" data-filter="add"
+                  >Add New Recipe</a
+                >
+              </li>
+              <li>
+                <a href="#easy-recipes" class="quick-link" data-filter="easy"
+                  >Easy Recipes</a
+                >
+              </li>
+
+              <li>
+                <a href="#quick-meals" class="quick-link" data-filter="quick"
+                  >Quick Meals</a
+                >
+              </li>
             </ul>
           </div>
 
@@ -204,7 +234,6 @@
           <div class="footer-section">
             <h3>Contact Info</h3>
             <p>📧 hello@nandinisrecipes.com</p>
-            <p>📞 +1 (555) 123-4567</p>
             <p>📍 123 Culinary Street, Foodville</p>
           </div>
         </div>

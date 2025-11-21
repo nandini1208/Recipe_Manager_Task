@@ -102,9 +102,11 @@ const RecipeManager = {
                   </div>
                   <div class="meta-item">
                     <div class="meta-label">Cook Time</div>
-                    <div class="meta-value">${Utils.formatTime(
-                      recipe.cookTime
-                    )}</div>
+                    <div class="meta-value">${
+                      recipe.cookTime === 0
+                        ? "No cooking"
+                        : Utils.formatTime(recipe.cookTime)
+                    }</div>
                   </div>
                   <div class="meta-item">
                     <div class="meta-label">Total Time</div>

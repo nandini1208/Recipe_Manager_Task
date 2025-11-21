@@ -6,6 +6,7 @@ const App = {
     this.setupEventListeners();
     this.navigateTo("home");
     RecipeManager.init();
+    this.setupFooterLinks(); // ADDED: Initialize footer links
   },
 
   setupEventListeners: function () {
@@ -39,6 +40,82 @@ const App = {
         this.navigateTo("home");
       }
     });
+  },
+
+  // ADDED: Footer links setup
+  setupFooterLinks: function () {
+    const quickLinks = document.querySelectorAll(".quick-link");
+
+    quickLinks.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const filterType = link.getAttribute("data-filter");
+        this.handleQuickLink(filterType);
+      });
+    });
+  },
+
+  // ADDED: Handle footer quick links
+  handleQuickLink: function (filterType) {
+    console.log("Quick link clicked:", filterType);
+
+    // Always navigate to home first (except for add recipe)
+    if (filterType !== "add") {
+      this.navigateTo("home");
+    }
+
+    // Apply filters after a short delay to ensure page is loaded
+    setTimeout(() => {
+      switch (filterType) {
+        case "all":
+          RecipeManager.clearFilters();
+          break;
+
+        case "add":
+          this.navigateTo("add");
+          break;
+
+        case "easy":
+          document.getElementById("difficulty-filter").value = "Easy";
+          RecipeManager.handleSearchAndFilter();
+          break;
+
+        case "dessert":
+          this.filterDesserts();
+          break;
+
+        case "quick":
+          this.filterQuickMeals();
+          break;
+      }
+    }, 100);
+
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },
+
+  // ADDED: Filter quick meals function
+  filterQuickMeals: function () {
+    const allRecipes = RecipeManager.currentRecipes;
+    const filteredQuickMeals = allRecipes.filter((recipe) => {
+      const totalTime = recipe.prepTime + recipe.cookTime;
+      return totalTime <= 15; // 15 minutes or less
+    });
+
+    RecipeManager.renderRecipes(filteredQuickMeals);
+
+    // Show message if no quick meals found
+    if (filteredQuickMeals.length === 0) {
+      const recipeGrid = document.getElementById("recipe-grid");
+      if (recipeGrid) {
+        recipeGrid.innerHTML = `
+          <div class="empty-state">
+            <h3>No Quick Meals Found</h3>
+            <p>No recipes under 15 minutes available. Add some quick recipes!</p>
+          </div>
+        `;
+      }
+    }
   },
 
   setupDynamicFormListeners: function () {
@@ -203,19 +280,28 @@ const App = {
       imageUrl: formData.imageUrl || null,
     };
 
+    let success = false;
+
     if (this.editingRecipeId) {
       completeRecipeData.id = this.editingRecipeId;
-      if (Storage.updateRecipe(completeRecipeData)) {
-        Utils.showNotification("Recipe updated successfully!", "success");
-        RecipeManager.currentRecipes = Storage.getRecipes();
-        this.navigateTo("home");
-      }
+      success = Storage.updateRecipe(completeRecipeData);
     } else {
-      if (Storage.addRecipe(completeRecipeData)) {
-        Utils.showNotification("Recipe added successfully!", "success");
+      success = Storage.addRecipe(completeRecipeData);
+    }
+
+    if (success) {
+      const message = this.editingRecipeId
+        ? "Recipe updated successfully!"
+        : "Recipe added successfully!";
+      Utils.showNotification(message, "success");
+
+      setTimeout(() => {
         RecipeManager.currentRecipes = Storage.getRecipes();
+        RecipeManager.renderRecipes(RecipeManager.currentRecipes);
         this.navigateTo("home");
-      }
+        this.resetForm();
+        this.editingRecipeId = null;
+      }, 800);
     }
   },
 
@@ -248,10 +334,17 @@ const App = {
     }
 
     const cookTime = document.getElementById("cook-time").value;
-    if (!cookTime || cookTime < 1) {
-      this.showError("cook-time", "Valid cook time is required");
-      isValid = false;
+    const cookTimeError = document.getElementById("cook-time-error");
+
+    if (cookTime === "" || cookTime < 0) {
+      cookTimeError.textContent =
+        "Please enter a valid cook time (0 or more minutes)";
+      cookTimeError.classList.add("show");
+      return false;
     }
+
+    cookTimeError.classList.remove("show");
+    return true;
 
     const difficulty = document.getElementById("difficulty").value;
     if (!difficulty) {
@@ -519,6 +612,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 });
+
 // Image path debugger
 function debugImagePaths() {
   console.log("=== IMAGE PATH DEBUGGER ===");
@@ -541,3 +635,10 @@ function debugImagePaths() {
 
 // Run when page loads
 document.addEventListener("DOMContentLoaded", debugImagePaths);
+
+// Safe refresh function
+function safeRefresh() {
+  console.log("Refreshing without clearing data...");
+  RecipeManager.init();
+  console.log("Recipes loaded:", RecipeManager.currentRecipes.length);
+}
