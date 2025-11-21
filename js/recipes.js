@@ -10,7 +10,7 @@ const RecipeManager = {
   setupEventListeners: function () {
     const searchInput = document.getElementById("search-input");
     const difficultyFilter = document.getElementById("difficulty-filter");
-    const timeFilter = document.getElementById("timeFilter"); // ✅ CORRECTED ID
+    const timeFilter = document.getElementById("timeFilter");
 
     if (searchInput) {
       searchInput.addEventListener("input", () => {
@@ -25,12 +25,10 @@ const RecipeManager = {
     }
 
     if (timeFilter) {
-      // ✅ ADDED: Real-time input event for instant filtering
       timeFilter.addEventListener("input", () => {
         this.handleSearchAndFilter();
       });
 
-      // ✅ KEEP: Change event as backup
       timeFilter.addEventListener("change", () => {
         this.handleSearchAndFilter();
       });
@@ -42,10 +40,13 @@ const RecipeManager = {
       .getElementById("search-input")
       .value.toLowerCase();
     const difficulty = document.getElementById("difficulty-filter").value;
-    const maxTimeInput = document.getElementById("timeFilter").value; // ✅ CORRECTED ID
+    const maxTimeInput = document.getElementById("timeFilter").value;
 
-    // ✅ FIXED: Handle empty time input properly
-    const maxTime = maxTimeInput === "" ? 0 : parseInt(maxTimeInput) || 0;
+    // ✅ FIXED: Proper time filter logic
+    let maxTime = 0;
+    if (maxTimeInput && maxTimeInput.trim() !== "" && !isNaN(maxTimeInput)) {
+      maxTime = parseInt(maxTimeInput);
+    }
 
     console.log(
       "Filtering - Search:",
@@ -68,20 +69,29 @@ const RecipeManager = {
         difficulty === "all" || recipe.difficulty === difficulty;
 
       const totalTime = recipe.prepTime + recipe.cookTime;
-      // ✅ FIXED: Time filter logic - show all when 0, filter when > 0
-      const matchesTime = maxTime === 0 || totalTime <= maxTime;
+
+      // ✅ FIXED: Correct time filter logic
+      let matchesTime = true;
+      if (maxTime > 0) {
+        matchesTime = totalTime <= maxTime;
+      }
+      // If maxTime is 0 or empty, show all recipes (matchesTime remains true)
+
+      console.log(
+        `Recipe: ${recipe.title}, Total: ${totalTime}min, Max: ${maxTime}min, Match: ${matchesTime}`
+      );
 
       return matchesSearch && matchesDifficulty && matchesTime;
     });
 
-    console.log("Filtered recipes:", filteredRecipes.length);
+    console.log("Final filtered recipes:", filteredRecipes.length);
     this.renderRecipes(filteredRecipes);
   },
 
   clearFilters: function () {
     document.getElementById("search-input").value = "";
     document.getElementById("difficulty-filter").value = "all";
-    document.getElementById("timeFilter").value = ""; // ✅ CORRECTED ID
+    document.getElementById("timeFilter").value = "";
     this.handleSearchAndFilter();
   },
 
@@ -154,15 +164,10 @@ const RecipeManager = {
                 </div>
                 
                 <div class="recipe-actions">
+                  <!-- ONLY VIEW BUTTON - EDIT AND DELETE REMOVED -->
                   <button class="btn btn-primary view-recipe" data-id="${
                     recipe.id
-                  }">View</button>
-                  <button class="btn btn-secondary edit-recipe" data-id="${
-                    recipe.id
-                  }">Edit</button>
-                  <button class="btn btn-danger delete-recipe" data-id="${
-                    recipe.id
-                  }">Delete</button>
+                  }">View Recipe</button>
                 </div>
               </div>
             </div>
@@ -180,20 +185,6 @@ const RecipeManager = {
       button.addEventListener("click", (e) => {
         const recipeId = e.target.getAttribute("data-id");
         App.showRecipeDetail(recipeId);
-      });
-    });
-
-    document.querySelectorAll(".edit-recipe").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        const recipeId = e.target.getAttribute("data-id");
-        App.prepareEditForm(recipeId);
-      });
-    });
-
-    document.querySelectorAll(".delete-recipe").forEach((button) => {
-      button.addEventListener("click", (e) => {
-        const recipeId = e.target.getAttribute("data-id");
-        App.deleteRecipe(recipeId);
       });
     });
   },
