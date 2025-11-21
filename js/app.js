@@ -6,7 +6,9 @@ const App = {
     this.setupEventListeners();
     this.navigateTo("home");
     RecipeManager.init();
-    this.setupFooterLinks(); // ADDED: Initialize footer links
+    this.setupFooterLinks();
+    this.setupRealTimeValidation();
+    this.setupClearFilters(); // ADDED: Clear filters setup
   },
 
   setupEventListeners: function () {
@@ -42,7 +44,94 @@ const App = {
     });
   },
 
-  // ADDED: Footer links setup
+  // ADDED: Clear filters setup
+  setupClearFilters: function () {
+    const clearFiltersBtn = document.getElementById("clear-filters");
+    if (clearFiltersBtn) {
+      clearFiltersBtn.addEventListener("click", () => {
+        this.clearAllFilters();
+      });
+    }
+  },
+
+  // ADDED: Clear all filters function
+  clearAllFilters: function () {
+    console.log("Clearing all filters...");
+
+    // Clear search input
+    const searchInput = document.getElementById("search-input");
+    if (searchInput) {
+      searchInput.value = "";
+    }
+
+    // Reset difficulty filter
+    const difficultyFilter = document.getElementById("difficulty-filter");
+    if (difficultyFilter) {
+      difficultyFilter.value = "all";
+    }
+
+    // Reset time filter
+    const timeFilter = document.getElementById("time-filter");
+    if (timeFilter) {
+      timeFilter.value = "0";
+    }
+
+    // Refresh recipes with cleared filters
+    RecipeManager.currentRecipes = Storage.getRecipes();
+    RecipeManager.renderRecipes(RecipeManager.currentRecipes);
+
+    // Show success notification
+    Utils.showNotification("All filters cleared!", "success");
+
+    // Add visual feedback
+    const clearBtn = document.getElementById("clear-filters");
+    if (clearBtn) {
+      clearBtn.classList.add("active");
+      setTimeout(() => {
+        clearBtn.classList.remove("active");
+      }, 2000);
+    }
+  },
+
+  // ADDED: Real-time validation setup
+  setupRealTimeValidation: function () {
+    // Ingredients real-time validation
+    document.addEventListener("input", (e) => {
+      if (e.target.classList.contains("ingredient-input")) {
+        this.validateIngredientsRealTime();
+      }
+      if (e.target.classList.contains("instruction-input")) {
+        this.validateInstructionsRealTime();
+      }
+    });
+  },
+
+  // ADDED: Real-time ingredients validation
+  validateIngredientsRealTime: function () {
+    const ingredientInputs = document.querySelectorAll(".ingredient-input");
+    const hasIngredients = Array.from(ingredientInputs).some(
+      (input) => input.value.trim() !== ""
+    );
+    const errorElement = document.getElementById("ingredients-error");
+
+    if (hasIngredients && errorElement) {
+      errorElement.classList.remove("show");
+    }
+  },
+
+  // ADDED: Real-time instructions validation
+  validateInstructionsRealTime: function () {
+    const instructionInputs = document.querySelectorAll(".instruction-input");
+    const hasInstructions = Array.from(instructionInputs).some(
+      (input) => input.value.trim() !== ""
+    );
+    const errorElement = document.getElementById("instructions-error");
+
+    if (hasInstructions && errorElement) {
+      errorElement.classList.remove("show");
+    }
+  },
+
   setupFooterLinks: function () {
     const quickLinks = document.querySelectorAll(".quick-link");
 
@@ -55,16 +144,13 @@ const App = {
     });
   },
 
-  // ADDED: Handle footer quick links
   handleQuickLink: function (filterType) {
     console.log("Quick link clicked:", filterType);
 
-    // Always navigate to home first (except for add recipe)
     if (filterType !== "add") {
       this.navigateTo("home");
     }
 
-    // Apply filters after a short delay to ensure page is loaded
     setTimeout(() => {
       switch (filterType) {
         case "all":
@@ -90,21 +176,18 @@ const App = {
       }
     }, 100);
 
-    // Scroll to top smoothly
     window.scrollTo({ top: 0, behavior: "smooth" });
   },
 
-  // ADDED: Filter quick meals function
   filterQuickMeals: function () {
     const allRecipes = RecipeManager.currentRecipes;
     const filteredQuickMeals = allRecipes.filter((recipe) => {
       const totalTime = recipe.prepTime + recipe.cookTime;
-      return totalTime <= 15; // 15 minutes or less
+      return totalTime <= 15;
     });
 
     RecipeManager.renderRecipes(filteredQuickMeals);
 
-    // Show message if no quick meals found
     if (filteredQuickMeals.length === 0) {
       const recipeGrid = document.getElementById("recipe-grid");
       if (recipeGrid) {
@@ -136,9 +219,11 @@ const App = {
     document.addEventListener("click", (e) => {
       if (e.target.classList.contains("remove-ingredient")) {
         this.removeFormField(e.target, "ingredients");
+        this.validateIngredientsRealTime(); // ADDED: Validate after removal
       }
       if (e.target.classList.contains("remove-instruction")) {
         this.removeFormField(e.target, "instructions");
+        this.validateInstructionsRealTime(); // ADDED: Validate after removal
       }
     });
   },
@@ -308,12 +393,8 @@ const App = {
   validateForm: function () {
     let isValid = true;
 
-    document.querySelectorAll(".error-message").forEach((el) => {
-      el.classList.remove("show");
-    });
-    document.querySelectorAll(".error").forEach((el) => {
-      el.classList.remove("error");
-    });
+    // Clear all previous errors
+    this.clearAllErrors();
 
     // ✅ Recipe Title Validation
     const title = document.getElementById("title").value.trim();
@@ -329,7 +410,7 @@ const App = {
       isValid = false;
     }
 
-    // ✅ Prep Time Validation (0 allowed)
+    // ✅ Prep Time Validation
     const prepTime = document.getElementById("prep-time").value;
     if (prepTime === "" || prepTime < 0) {
       this.showError(
@@ -339,7 +420,7 @@ const App = {
       isValid = false;
     }
 
-    // ✅ Cook Time Validation (0 allowed)
+    // ✅ Cook Time Validation
     const cookTime = document.getElementById("cook-time").value;
     if (cookTime === "" || cookTime < 0) {
       this.showError(
@@ -363,38 +444,54 @@ const App = {
       isValid = false;
     }
 
-    // ✅ Ingredients Validation
-    const ingredients = this.getIngredients();
-    if (ingredients.length === 0) {
+    // ✅ Ingredients Validation - FIXED
+    const ingredientInputs = document.querySelectorAll(".ingredient-input");
+    const hasIngredients = Array.from(ingredientInputs).some(
+      (input) => input.value.trim() !== ""
+    );
+    if (!hasIngredients) {
       this.showError("ingredients", "At least one ingredient is required");
-      isValid = false;
-    } else if (ingredients.some((ing) => !ing.trim())) {
-      this.showError("ingredients", "All ingredients must be filled");
       isValid = false;
     }
 
-    // ✅ Instructions Validation
-    const instructions = this.getInstructions();
-    if (instructions.length === 0) {
+    // ✅ Instructions Validation - FIXED
+    const instructionInputs = document.querySelectorAll(".instruction-input");
+    const hasInstructions = Array.from(instructionInputs).some(
+      (input) => input.value.trim() !== ""
+    );
+    if (!hasInstructions) {
       this.showError(
         "instructions",
         "At least one instruction step is required"
       );
       isValid = false;
-    } else if (instructions.some((inst) => !inst.trim())) {
-      this.showError("instructions", "All instruction steps must be filled");
-      isValid = false;
     }
 
     return isValid;
   },
+
+  // ADDED: Clear all errors function
+  clearAllErrors: function () {
+    document.querySelectorAll(".error-message").forEach((el) => {
+      el.textContent = "";
+      el.classList.remove("show");
+    });
+
+    document.querySelectorAll(".error").forEach((el) => {
+      el.classList.remove("error");
+    });
+  },
+
   showError: function (fieldId, message) {
     const errorElement = document.getElementById(`${fieldId}-error`);
     const inputElement = document.getElementById(fieldId);
 
-    if (errorElement && inputElement) {
+    if (errorElement) {
       errorElement.textContent = message;
       errorElement.classList.add("show");
+    }
+
+    if (inputElement) {
       inputElement.classList.add("error");
     }
   },
@@ -457,12 +554,7 @@ const App = {
       `;
     }
 
-    document.querySelectorAll(".error-message").forEach((el) => {
-      el.classList.remove("show");
-    });
-    document.querySelectorAll(".error").forEach((el) => {
-      el.classList.remove("error");
-    });
+    this.clearAllErrors();
   },
 
   showRecipeDetail: function (recipeId) {
@@ -628,7 +720,6 @@ function debugImagePaths() {
     const imgPath = img.src;
     console.log(`Image ${index + 1}: ${imgPath}`);
 
-    // Check if it's a local file
     if (imgPath.includes("file://")) {
       console.error("❌ LOCAL FILE PATH - May not work in browsers");
     } else if (imgPath.includes("http")) {
@@ -639,10 +730,8 @@ function debugImagePaths() {
   });
 }
 
-// Run when page loads
 document.addEventListener("DOMContentLoaded", debugImagePaths);
 
-// Safe refresh function
 function safeRefresh() {
   console.log("Refreshing without clearing data...");
   RecipeManager.init();

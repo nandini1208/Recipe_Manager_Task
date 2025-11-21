@@ -195,13 +195,13 @@ const Storage = {
 
       {
         id: Utils.generateId(),
-        title: "Instant Dhokla",
+        title: "Dhokla",
         description:
           "Soft, spongy, and fluffy Gujarati dhokla made quickly using besan and eno.",
         prepTime: 10,
         cookTime: 15,
         totalTime: 25,
-        difficulty: "Easy",
+        difficulty: "Medium",
         imageUrl: "images/dhokla.jpg",
         ingredients: [
           "1 cup besan (gram flour)",
