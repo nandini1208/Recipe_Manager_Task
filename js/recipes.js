@@ -10,7 +10,7 @@ const RecipeManager = {
   setupEventListeners: function () {
     const searchInput = document.getElementById("search-input");
     const difficultyFilter = document.getElementById("difficulty-filter");
-    const timeFilter = document.getElementById("time-filter");
+    const timeFilter = document.getElementById("timeFilter"); // ✅ CORRECTED ID
 
     if (searchInput) {
       searchInput.addEventListener("input", () => {
@@ -25,6 +25,12 @@ const RecipeManager = {
     }
 
     if (timeFilter) {
+      // ✅ ADDED: Real-time input event for instant filtering
+      timeFilter.addEventListener("input", () => {
+        this.handleSearchAndFilter();
+      });
+
+      // ✅ KEEP: Change event as backup
       timeFilter.addEventListener("change", () => {
         this.handleSearchAndFilter();
       });
@@ -36,7 +42,19 @@ const RecipeManager = {
       .getElementById("search-input")
       .value.toLowerCase();
     const difficulty = document.getElementById("difficulty-filter").value;
-    const maxTime = parseInt(document.getElementById("time-filter").value);
+    const maxTimeInput = document.getElementById("timeFilter").value; // ✅ CORRECTED ID
+
+    // ✅ FIXED: Handle empty time input properly
+    const maxTime = maxTimeInput === "" ? 0 : parseInt(maxTimeInput) || 0;
+
+    console.log(
+      "Filtering - Search:",
+      searchTerm,
+      "Difficulty:",
+      difficulty,
+      "Max Time:",
+      maxTime
+    );
 
     const filteredRecipes = this.currentRecipes.filter((recipe) => {
       const matchesSearch =
@@ -50,18 +68,20 @@ const RecipeManager = {
         difficulty === "all" || recipe.difficulty === difficulty;
 
       const totalTime = recipe.prepTime + recipe.cookTime;
+      // ✅ FIXED: Time filter logic - show all when 0, filter when > 0
       const matchesTime = maxTime === 0 || totalTime <= maxTime;
 
       return matchesSearch && matchesDifficulty && matchesTime;
     });
 
+    console.log("Filtered recipes:", filteredRecipes.length);
     this.renderRecipes(filteredRecipes);
   },
 
   clearFilters: function () {
     document.getElementById("search-input").value = "";
     document.getElementById("difficulty-filter").value = "all";
-    document.getElementById("time-filter").value = "0";
+    document.getElementById("timeFilter").value = ""; // ✅ CORRECTED ID
     this.handleSearchAndFilter();
   },
 
@@ -71,7 +91,14 @@ const RecipeManager = {
     if (!recipeGrid) return;
 
     if (recipes.length === 0) {
-      // ... (keep your existing empty state code)
+      recipeGrid.innerHTML = `
+        <div class="empty-state">
+          <h3>No Recipes Found</h3>
+          <p>Try adjusting your search criteria or clear filters to see all recipes.</p>
+          <button class="btn btn-primary" onclick="RecipeManager.clearFilters()">Clear All Filters</button>
+        </div>
+      `;
+      return;
     }
 
     recipeGrid.innerHTML = `
@@ -95,16 +122,20 @@ const RecipeManager = {
                 
                 <div class="recipe-meta">
                   <div class="meta-item">
-  <div class="meta-label">Prep Time</div>
-  <div class="meta-value">${
-    recipe.prepTime === 0 ? "No prep" : Utils.formatTime(recipe.prepTime)
-  }</div>
+                    <div class="meta-label">Prep Time</div>
+                    <div class="meta-value">${
+                      recipe.prepTime === 0
+                        ? "No prep"
+                        : Utils.formatTime(recipe.prepTime)
+                    }</div>
                   </div>
                   <div class="meta-item">
                     <div class="meta-label">Cook Time</div>
-  <div class="meta-value">${
-    recipe.cookTime === 0 ? "No cooking" : Utils.formatTime(recipe.cookTime)
-  }</div>
+                    <div class="meta-value">${
+                      recipe.cookTime === 0
+                        ? "No cooking"
+                        : Utils.formatTime(recipe.cookTime)
+                    }</div>
                   </div>
                   <div class="meta-item">
                     <div class="meta-label">Total Time</div>
@@ -126,7 +157,12 @@ const RecipeManager = {
                   <button class="btn btn-primary view-recipe" data-id="${
                     recipe.id
                   }">View</button>
-                  
+                  <button class="btn btn-secondary edit-recipe" data-id="${
+                    recipe.id
+                  }">Edit</button>
+                  <button class="btn btn-danger delete-recipe" data-id="${
+                    recipe.id
+                  }">Delete</button>
                 </div>
               </div>
             </div>
@@ -138,6 +174,7 @@ const RecipeManager = {
 
     this.addRecipeCardEventListeners();
   },
+
   addRecipeCardEventListeners: function () {
     document.querySelectorAll(".view-recipe").forEach((button) => {
       button.addEventListener("click", (e) => {

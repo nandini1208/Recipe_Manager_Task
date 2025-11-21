@@ -45,7 +45,7 @@ const App = {
     });
   },
 
-  // ADDED: Time filter setup
+  // CORRECTED: Time filter setup
   setupTimeFilter: function () {
     const timeFilter = document.getElementById("timeFilter");
 
@@ -60,6 +60,7 @@ const App = {
       if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener("click", function () {
           timeFilter.value = "";
+          RecipeManager.handleSearchAndFilter(); // ✅ Automatically refresh
         });
       }
     }
@@ -75,7 +76,6 @@ const App = {
     }
   },
 
-  // UPDATED: Clear all filters function with time filter
   clearAllFilters: function () {
     console.log("Clearing all filters...");
 
@@ -91,15 +91,15 @@ const App = {
       difficultyFilter.value = "all";
     }
 
-    // Clear time filter - ✅ ADDED
-    const timeFilter = document.getElementById("timeFilter");
+    // Clear time filter
+    const timeFilter = document.getElementById("timeFilter"); // ✅ CORRECTED ID
     if (timeFilter) {
       timeFilter.value = "";
     }
 
     // Refresh recipes with cleared filters
     RecipeManager.currentRecipes = Storage.getRecipes();
-    RecipeManager.renderRecipes(RecipeManager.currentRecipes);
+    RecipeManager.handleSearchAndFilter(); // ✅ Use handleSearchAndFilter instead of renderRecipes
 
     // Show success notification
     Utils.showNotification("All filters cleared!", "success");
