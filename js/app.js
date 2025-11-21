@@ -315,49 +315,55 @@ const App = {
       el.classList.remove("error");
     });
 
+    // ✅ Recipe Title Validation
     const title = document.getElementById("title").value.trim();
     if (!title) {
       this.showError("title", "Recipe title is required");
       isValid = false;
     }
 
+    // ✅ Description Validation
     const description = document.getElementById("description").value.trim();
     if (!description) {
       this.showError("description", "Description is required");
       isValid = false;
     }
 
+    // ✅ Prep Time Validation (0 allowed)
     const prepTime = document.getElementById("prep-time").value;
-    if (!prepTime || prepTime < 1) {
-      this.showError("prep-time", "Valid prep time is required");
+    if (prepTime === "" || prepTime < 0) {
+      this.showError(
+        "prep-time",
+        "Please enter a valid prep time (0 or more minutes)"
+      );
       isValid = false;
     }
 
+    // ✅ Cook Time Validation (0 allowed)
     const cookTime = document.getElementById("cook-time").value;
-    const cookTimeError = document.getElementById("cook-time-error");
-
     if (cookTime === "" || cookTime < 0) {
-      cookTimeError.textContent =
-        "Please enter a valid cook time (0 or more minutes)";
-      cookTimeError.classList.add("show");
-      return false;
+      this.showError(
+        "cook-time",
+        "Please enter a valid cook time (0 or more minutes)"
+      );
+      isValid = false;
     }
 
-    cookTimeError.classList.remove("show");
-    return true;
-
+    // ✅ Difficulty Validation
     const difficulty = document.getElementById("difficulty").value;
     if (!difficulty) {
       this.showError("difficulty", "Please select a difficulty level");
       isValid = false;
     }
 
+    // ✅ Image URL Validation (Optional)
     const imageUrl = document.getElementById("image-url").value.trim();
     if (imageUrl && !Utils.isValidUrl(imageUrl)) {
       this.showError("image-url", "Please enter a valid URL");
       isValid = false;
     }
 
+    // ✅ Ingredients Validation
     const ingredients = this.getIngredients();
     if (ingredients.length === 0) {
       this.showError("ingredients", "At least one ingredient is required");
@@ -367,6 +373,7 @@ const App = {
       isValid = false;
     }
 
+    // ✅ Instructions Validation
     const instructions = this.getInstructions();
     if (instructions.length === 0) {
       this.showError(
@@ -381,7 +388,6 @@ const App = {
 
     return isValid;
   },
-
   showError: function (fieldId, message) {
     const errorElement = document.getElementById(`${fieldId}-error`);
     const inputElement = document.getElementById(fieldId);

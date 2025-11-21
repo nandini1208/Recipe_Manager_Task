@@ -90,8 +90,8 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="prep-time">Prep Time (minutes) *</label>
-              <input type="number" id="prep-time" min="1" required />
+              <label for="prep-time">Prep Time (minutes)</label>
+              <input type="number" id="prep-time" min="0" value="0" />
               <div class="error-message" id="prep-time-error"></div>
             </div>
 
@@ -101,7 +101,8 @@
                 type="number"
                 id="cook-time"
                 min="0"
-                placeholder="0 for no-cook recipes"
+                value="0"
+                placeholder="0 for no cooking"
               />
               <div class="error-message" id="cook-time-error"></div>
             </div>
@@ -158,7 +159,6 @@
             </button>
             <div class="error-message" id="instructions-error"></div>
           </div>
-
           <div class="form-actions">
             <button type="submit" class="btn btn-primary form-submit-btn">
               Save Recipe
@@ -183,11 +183,14 @@
       <div class="container">
         <div class="footer-content">
           <div class="footer-section">
-            <h3>About Nandini's Recipes</h3>
+            <h3>🍽️✨ About Nandini's Recipes</h3>
             <p>
-              Your personal recipe collection where you can store, organize, and
-              share your favorite culinary creations. From quick weekday meals
-              to elaborate weekend feasts.
+              Welcome to my little world of cooking! Here I collect my favorite
+              recipes—some quick and simple, some a bit special—each one tried,
+              tested, and loved by me. Whether it's a weekday comfort dish or a
+              weekend treat, every recipe carries a small story and a personal
+              touch. I hope you feel the same warmth and joy that I do while
+              making them. Happy cooking! 👩‍🍳✨
             </p>
           </div>
 
@@ -219,10 +222,11 @@
           </div>
 
           <div class="footer-section">
-            <h3>Stay Updated</h3>
+            <h3>🔔 Stay Updated</h3>
             <p>
-              Subscribe to our newsletter for new recipe ideas and cooking tips
-              delivered to your inbox.
+              Subscribe to get fresh recipe ideas, handy cooking tips, and new
+              dishes straight to your inbox. Just simple, useful updates—no
+              spam, only good food vibes! 🍳💛
             </p>
             <form class="newsletter-form">
               <input type="email" placeholder="Your email address" required />
@@ -232,8 +236,14 @@
 
           <div class="footer-section">
             <h3>Contact Info</h3>
-            <p>📧 hello@nandinisrecipes.com</p>
-            <p>📍 123 Culinary Street, Foodville</p>
+            <p>
+              <a href="mailto:hello@nandinisrecipes.com" class="email-link">
+                📧 nandiniguptait1@gmail.com
+              </a>
+            </p>
+            <p>📞 Phone:+91 6307089359 📍</p>
+
+            <p>📍 Address: Amar Business Zone, Floor 14</p>
           </div>
         </div>
 
