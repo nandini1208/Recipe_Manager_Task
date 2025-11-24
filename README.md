@@ -1,4 +1,4 @@
-# 🍳 Nandini's Menu Repository
+# 🍳 Nandini's Recipe Manager
 
 A beautiful and responsive recipe management web application where you can store, organize, and manage your favorite recipes with ease.
 
@@ -43,200 +43,230 @@ A beautiful and responsive recipe management web application where you can store
 ## 📁 Project Structure
 
 text
-
-recipe-website/
+RECIPE-MANAGER-APP/
 │
 ├── index.html # Main HTML file
-├── css/
-│ └── style.css # All styles and animations
-├── js/
-│ ├── app.js # Main application logic
-│ ├── recipes.js # Recipe management
-│ ├── storage.js # LocalStorage handling
-│ └── utils.js # Utility functions
-└── README.md # This file
-
-## 💾 Data Storage
-
-- LocalStorage - All recipes are saved in your browser
-
-- No Database Required - Works completely offline
-
-- Data Persistence - Recipes remain after browser restart
-
-## 🎯 How to Use
-
-### Adding a Recipe
-
-1.  Click "Add Recipe" in navigation (top-right corner)
-
-2.  Fill in recipe details:
-
-    - Title (required)
-
-    - Description (required)
-
-    - Prep & Cook Time
-
-    - Difficulty Level (required)
-
-    - Image URL (optional)
-
-    - Ingredients (at least one required)
-
-    - Instructions (at least one required)
-
-3.  Click "Save Recipe"
-
-### Managing Recipes
-
-- View All: Home page shows all recipes
-
-- Search: Use search bar to find specific recipes
-
-- Filter: Use difficulty and time filters
-
-- Edit: Click "Edit" on any recipe card
-
-- Delete: Click "Delete" (with confirmation)
-
-### Quick Access
-
-- All Recipes - View complete collection
-
-- Easy Recipes - Filter by easy difficulty
-
-- Quick Meals - Recipes under 15 minutes
-
-- Add New - Direct link to recipe form
-
-## 🎨 Navigation Layout
-
-- Left Side: Logo with animated cooking icon and website title
-
-- Right Side: Home and Add Recipe buttons
-
-- Responsive: On mobile, navigation centers for better usability
-
-## 🛠️ Technical Details
-
-### Built With
-
-- HTML5 - Semantic markup
-
-- CSS3 - Modern styling with Flexbox/Grid
-
-- JavaScript (ES6+) - Vanilla JS, no frameworks
-
-- LocalStorage API - Client-side data persistence
-
-### Browser Support
-
-- ✅ Chrome (recommended)
-
-- ✅ Firefox
-
-- ✅ Safari
-
-- ✅ Edge
-
-### Performance Features
-
-- Lazy Loading - Images load efficiently
-
-- Optimized Storage - Efficient data handling
-
-- Fast Search - Real-time filtering
-
-- Smooth Animations - CSS transforms and transitions
-
-## 📱 Mobile Features
-
-- Touch-Friendly buttons and forms
-
-- Responsive Grid adapts to screen size
-
-- Optimized Typography readable on small screens
-
-- Swipe-Friendly navigation
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-Recipes not saving?
-
-- Check if JavaScript is enabled
-
-- Ensure browser supports LocalStorage
-
-Images not loading?
-
-- Verify image URLs are valid
-
-- Check internet connection for external images
-
-Layout broken on mobile?
-
-- Refresh the page
-
-- Clear browser cache
-
-Filters not working?
-
-- Check console for errors (F12)
-
-- Ensure all JS files are loaded
-
-### Debug Mode
-
-Open browser console (F12) and run:
-
-javascript
-
-debugImagePaths(); // Check image loading
-safeRefresh(); // Refresh without data loss
-
-## 🌟 Future Enhancements
-
-- Recipe categories/tags
-
-- User authentication
-
-- Recipe sharing
-
-- Meal planning
-
-- Shopping list generation
-
-- Recipe ratings and reviews
-
-- Export/import recipes
-
-- Dark mode toggle
-
-## 📞 Support
-
-For issues and suggestions:
-
-- Email: nandiniguptait1@gmail.com
-
-- Phone: +91 6307089359
-
-## 📄 License
-
-This project is open source and available under the [MIT License](https://license/).
-
-## 🙏 Acknowledgments
-
-- Background images from [Unsplash](https://unsplash.com/)
-
-- Icons from emoji library
-
-- Inspiration from food lovers worldwide
-
--
-
+├── README.md # Project documentation
+│
+├── css/ # Stylesheets folder
+│ └── style.css # Main stylesheet
+│
+├── images/ # Recipe images folder
+│ ├── img2.png
+│ ├── img3.jpg
+│ ├── img4.webp
+│ ├── img5.jpg
+│ ├── img6.jpg
+│ ├── img7.webp
+│ └── img8.png
+│
+└── js/ # JavaScript modules
+├── app.js # Main application logic
+├── recipes.js # Recipe data and management
+├── storage.js # Local storage operations
+└── utils.js # Utility functions
+
+text
+
+## 🚀 Features
+
+- **Recipe Catalog**: Browse through a collection of delicious recipes
+- **Filtering System**: Filter by difficulty level and cooking time
+- **Responsive Design**: Works perfectly on all devices
+- **Recipe Management**: Add, view, and manage recipes
+- **Local Storage**: Save recipes locally in browser
+- **Modern UI**: Clean, food-themed design
+
+## 🛠️ Technologies Used
+
+- **HTML5** - Semantic structure
+- **CSS3** - Modern styling with Flexbox/Grid
+- **JavaScript ES6+** - Application logic
+- **Local Storage API** - Data persistence
+- **Font Awesome** - Icons
+- **Google Fonts** - Typography
+
+## 📋 File Descriptions
+
+### HTML Files
+
+- `index.html` - Main application interface
+
+### CSS Files
+
+- `css/style.css` - All styling including responsive design, animations, and layout
+
+### JavaScript Files
+
+- `js/app.js` - Main application controller, DOM manipulation, event handling
+- `js/recipes.js` - Recipe data structure and management functions
+- `js/storage.js` - Local storage operations (save, load, delete recipes)
+- `js/utils.js` - Helper functions and utilities
+
+### Assets
+
+- `images/` - Folder containing all recipe images
+
+## 🎯 Installation & Setup
+
+1. **Download** all project files maintaining the folder structure
+2. **Open** `index.html` in a web browser
+3. **No server required** - works directly in browser
+
+## 💻 Usage
+
+### Browsing Recipes
+
+- Scroll through the recipe cards to view all available recipes
+- Each card shows:
+  - Recipe image
+  - Title and description
+  - Preparation and cooking times
+  - Difficulty level
+  - "View Recipe" button
+
+### Filtering Recipes
+
+- Use the **Difficulty** dropdown to filter by:
+  - All recipes
+  - Easy
+  - Medium
+  - Hard
+- Use the **Total Time** input to filter by maximum cooking time
+- Click **Clear Filters** to reset all filters
+
+### Adding Recipes
+
+- Click the **+ Add Recipe** button
+- Fill in the recipe details in the form
+- Submit to add to your collection
+
+## 🔧 JavaScript Modules Overview
+
+### js/app.js
+
+- Initializes the application
+- Handles DOM events
+- Manages UI updates
+- Coordinates between other modules
+
+### js/recipes.js
+
+```javascript
+// Example structure
+const recipes = [
+  {
+    id: 1,
+    title: "Vegetable Stir Fry",
+    description: "Quick and healthy vegetable stir fry...",
+    prepTime: 10,
+    cookTime: 10,
+    totalTime: 20,
+    difficulty: "Easy",
+    image: "images/img2.png",
+  },
+];
 ```
 
-```
+js/storage.js
+saveRecipes(recipes) - Saves recipes to localStorage
+
+loadRecipes() - Loads recipes from localStorage
+
+clearRecipes() - Clears all saved recipes
+
+js/utils.js
+Helper functions for:
+
+Formatting time
+
+Validating inputs
+
+Generating unique IDs
+
+DOM manipulation helpers
+
+🎨 CSS Features (css/style.css)
+Key Styling Components:
+Responsive Grid System - Flexbox and CSS Grid layouts
+
+Recipe Cards - Hover effects and transitions
+
+Navigation Bar - Fixed positioning with backdrop
+
+Filter Section - Form styling and interactive elements
+
+Footer Design - Multi-column layout
+
+Color Variables - Consistent color scheme
+
+Media Queries - Mobile-first responsive design
+
+Responsive Breakpoints:
+Mobile: < 768px
+
+Tablet: 768px - 1024px
+
+Desktop: > 1024px
+
+📱 Browser Compatibility
+Chrome (recommended)
+
+Firefox
+
+Safari
+
+Edge
+
+🔮 Future Enhancements
+Recipe search functionality
+
+Recipe categories
+
+User ratings and reviews
+
+Meal planning features
+
+Shopping list generation
+
+Recipe sharing
+
+Print recipe feature
+
+🐛 Troubleshooting
+Common Issues:
+Images not loading - Check image paths in images/ folder
+
+Local storage not working - Ensure browser supports localStorage
+
+Filters not applying - Check console for JavaScript errors
+
+Development:
+Open browser developer tools (F12) for debugging
+
+Check console for error messages
+
+Verify all file paths are correct
+
+👩‍🍳 About
+Welcome to my little world of cooking! Here I collect my favorite recipes—some quick and simple, some a bit special—each one tried, tested, and loved by me.
+
+📞 Contact
+Email: nandiniguptait1@gmail.com
+
+Phone: +91 6307089359
+
+Address: Amar Business Zone, Floor 14
+© 2025 Nandini's Menu Repository. All rights reserved. | Designed with ❤️ for food lovers
+
+This updated README.md now correctly reflects your project structure with the `css/style.css` file in the proper location. It includes:
+
+- ✅ Correct file structure with css folder
+- ✅ Complete documentation for all files
+- ✅ CSS-specific section explaining styling features
+- ✅ Installation and usage instructions
+- ✅ Technical details for each JavaScript module
+- ✅ Troubleshooting section
+- ✅ Contact information and personal touch
+
+The README is now perfectly aligned with your actual project structure!
