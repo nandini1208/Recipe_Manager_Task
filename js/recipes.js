@@ -35,59 +35,67 @@ const RecipeManager = {
     }
   },
 
+  // UPDATED TIME FILTER - Clear logic
   handleSearchAndFilter: function () {
     const searchTerm = document
       .getElementById("search-input")
       .value.toLowerCase();
-    const difficulty = document.getElementById("difficulty-filter").value;
-    const maxTimeInput = document.getElementById("timeFilter").value;
+    const difficultyFilter = document.getElementById("difficulty-filter").value;
+    const timeFilterValue = document.getElementById("timeFilter").value.trim();
 
-    // ✅ FIXED: Proper time filter logic
-    let maxTime = 0;
-    if (maxTimeInput && maxTimeInput.trim() !== "" && !isNaN(maxTimeInput)) {
-      maxTime = parseInt(maxTimeInput);
+    let filtered = this.currentRecipes;
+
+    // Search filter
+    if (searchTerm) {
+      filtered = filtered.filter((recipe) =>
+        recipe.title.toLowerCase().includes(searchTerm)
+      );
     }
 
-    console.log(
-      "Filtering - Search:",
-      searchTerm,
-      "Difficulty:",
-      difficulty,
-      "Max Time:",
-      maxTime
-    );
-
-    const filteredRecipes = this.currentRecipes.filter((recipe) => {
-      const matchesSearch =
-        recipe.title.toLowerCase().includes(searchTerm) ||
-        recipe.description.toLowerCase().includes(searchTerm) ||
-        recipe.ingredients.some((ingredient) =>
-          ingredient.toLowerCase().includes(searchTerm)
-        );
-
-      const matchesDifficulty =
-        difficulty === "all" || recipe.difficulty === difficulty;
-
-      const totalTime = recipe.prepTime + recipe.cookTime;
-
-      // ✅ FIXED: Correct time filter logic
-      let matchesTime = true;
-      if (maxTime > 0) {
-        matchesTime = totalTime <= maxTime;
-      }
-      // If maxTime is 0 or empty, show all recipes (matchesTime remains true)
-
-      console.log(
-        `Recipe: ${recipe.title}, Total: ${totalTime}min, Max: ${maxTime}min, Match: ${matchesTime}`
+    // Difficulty filter
+    if (difficultyFilter !== "all") {
+      filtered = filtered.filter(
+        (recipe) => recipe.difficulty === difficultyFilter
       );
+    }
 
-      return matchesSearch && matchesDifficulty && matchesTime;
-    });
+    // ✅ UPDATED TIME FILTER - Clear logic
+    if (timeFilterValue) {
+      let maxMinutes = 0;
 
-    console.log("Final filtered recipes:", filteredRecipes.length);
-    this.renderRecipes(filteredRecipes);
+      // Convert "1 hr 30 min", "1h30m", "90min", etc. to total minutes
+      if (timeFilterValue.includes("hr") || timeFilterValue.includes("h")) {
+        // Extract hours and minutes
+        const hoursMatch = timeFilterValue.match(/(\d+(\.\d+)?)\s*h(r)?/);
+        const minsMatch = timeFilterValue.match(/(\d+)\s*m(in)?/);
+
+        const hours = hoursMatch ? parseFloat(hoursMatch[1]) : 0;
+        const minutes = minsMatch ? parseInt(minsMatch[1]) : 0;
+
+        maxMinutes = hours * 60 + minutes;
+        console.log(`Converted: ${hours}h ${minutes}m → ${maxMinutes} minutes`);
+      } else {
+        // Simple number input (assume minutes)
+        maxMinutes = parseInt(timeFilterValue);
+      }
+
+      // Apply filter
+      if (!isNaN(maxMinutes) && maxMinutes > 0) {
+        filtered = filtered.filter((recipe) => {
+          const totalTime = recipe.prepTime + recipe.cookTime;
+          return totalTime <= maxMinutes;
+        });
+
+        console.log(
+          `Showing recipes under ${maxMinutes} minutes (${Math.floor(
+            maxMinutes / 60
+          )}h ${maxMinutes % 60}m)`
+        );
+      }
+    }
+
+    this.renderRecipes(filtered);
   },
-
   clearFilters: function () {
     document.getElementById("search-input").value = "";
     document.getElementById("difficulty-filter").value = "all";
@@ -97,84 +105,80 @@ const RecipeManager = {
 
   renderRecipes: function (recipes) {
     const recipeGrid = document.getElementById("recipe-grid");
-
     if (!recipeGrid) return;
 
     if (recipes.length === 0) {
       recipeGrid.innerHTML = `
-        <div class="empty-state">
-          <h3>No Recipes Found</h3>
-          <p>Try adjusting your search criteria or clear filters to see all recipes.</p>
-          <button class="btn btn-primary" onclick="RecipeManager.clearFilters()">Clear All Filters</button>
-        </div>
-      `;
+            <div class="empty-state">
+                <h3>No Recipes Found</h3>
+                <p>Try adjusting your search criteria.</p>
+                <button class="btn btn-primary" onclick="RecipeManager.clearFilters()">Clear Filters</button>
+            </div>
+        `;
       return;
     }
 
     recipeGrid.innerHTML = `
-      <div class="recipes-grid">
-        ${recipes
-          .map(
-            (recipe) => `
-            <div class="recipe-card">
-              <div class="recipe-image-container">
-                <img src="${
-                  recipe.imageUrl ||
-                  "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                }" 
-                     alt="${recipe.title}" 
-                     class="recipe-image"
-                     onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
-              </div>
-              <div class="recipe-content">
-                <h3 class="recipe-title">${recipe.title}</h3>
-                <p class="recipe-description">${recipe.description}</p>
-                
-                <div class="recipe-meta">
-                  <div class="meta-item">
-                    <div class="meta-label">Prep Time</div>
-                    <div class="meta-value">${
-                      recipe.prepTime === 0
-                        ? "No prep"
-                        : Utils.formatTime(recipe.prepTime)
-                    }</div>
-                  </div>
-                  <div class="meta-item">
-                    <div class="meta-label">Cook Time</div>
-                    <div class="meta-value">${
-                      recipe.cookTime === 0
-                        ? "No cooking"
-                        : Utils.formatTime(recipe.cookTime)
-                    }</div>
-                  </div>
-                  <div class="meta-item">
-                    <div class="meta-label">Total Time</div>
-                    <div class="meta-value">${Utils.formatTime(
-                      recipe.prepTime + recipe.cookTime
-                    )}</div>
-                  </div>
-                  <div class="meta-item">
-                    <div class="meta-label">Difficulty</div>
-                    <div class="meta-value">
-                      <span class="difficulty ${recipe.difficulty.toLowerCase()}">${
-              recipe.difficulty
-            }</span>
+        <div class="recipes-grid">
+            ${recipes
+              .map(
+                (recipe) => `
+                <div class="recipe-card">
+                    <div class="recipe-image-container">
+                        <img src="${
+                          recipe.imageUrl ||
+                          "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        }" 
+                             alt="${recipe.title}" 
+                             class="recipe-image"
+                             onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
                     </div>
-                  </div>
+                    <div class="recipe-content">
+                        <h3 class="recipe-title">${recipe.title}</h3>
+                        <p class="recipe-description">${recipe.description}</p>
+                        <div class="recipe-meta">
+                            <div class="meta-item">
+                                <div class="meta-label">Prep Time</div>
+                                <div class="meta-value">${
+                                  recipe.prepTime === 0
+                                    ? "No prep"
+                                    : Utils.formatTime(recipe.prepTime)
+                                }</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Cook Time</div>
+                                <div class="meta-value">${
+                                  recipe.cookTime === 0
+                                    ? "No cooking"
+                                    : Utils.formatTime(recipe.cookTime)
+                                }</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Total Time</div>
+                                <div class="meta-value">${Utils.formatTime(
+                                  recipe.prepTime + recipe.cookTime
+                                )}</div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-label">Difficulty</div>
+                                <div class="meta-value">
+                                    <span class="difficulty ${recipe.difficulty.toLowerCase()}">${
+                  recipe.difficulty
+                }</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="recipe-actions">
+                            <button class="btn btn-primary view-recipe" data-id="${
+                              recipe.id
+                            }">View Recipe</button>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="recipe-actions">
-                  <!-- ONLY VIEW BUTTON - EDIT AND DELETE REMOVED -->
-                  <button class="btn btn-primary view-recipe" data-id="${
-                    recipe.id
-                  }">View Recipe</button>
-                </div>
-              </div>
-            </div>
-          `
-          )
-          .join("")}
-      </div>
+            `
+              )
+              .join("")}
+        </div>
     `;
 
     this.addRecipeCardEventListeners();

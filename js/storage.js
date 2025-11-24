@@ -45,13 +45,28 @@ const Storage = {
   },
 
   updateRecipe: function (updatedRecipe) {
-    const recipes = this.getRecipes();
-    const index = recipes.findIndex((recipe) => recipe.id === updatedRecipe.id);
-    if (index !== -1) {
-      recipes[index] = updatedRecipe;
-      return this.saveRecipes(recipes);
+    try {
+      const recipes = this.getRecipes();
+
+      // ✅ PURANA METHOD - Filter out the old recipe and add updated one
+      const filteredRecipes = recipes.filter(
+        (recipe) => recipe.id !== updatedRecipe.id
+      );
+      filteredRecipes.push(updatedRecipe);
+
+      localStorage.setItem(this.KEY, JSON.stringify(filteredRecipes));
+
+      console.log(
+        "✅ Recipe updated. Before:",
+        recipes.length,
+        "After:",
+        filteredRecipes.length
+      );
+      return true;
+    } catch (error) {
+      console.error("Error updating recipe:", error);
+      return false;
     }
-    return false;
   },
 
   deleteRecipe: function (id) {

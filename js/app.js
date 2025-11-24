@@ -273,9 +273,11 @@ const App = {
     if (page === "home") {
       this.resetForm();
       RecipeManager.renderRecipes(RecipeManager.currentRecipes);
-    } else if (page === "add") {
+    } else if (page === "add" && !this.editingRecipeId) {
+      // ✅ ONLY reset form if NOT in edit mode
       this.prepareAddForm();
     }
+    // Agar editingRecipeId hai, to form reset mat karo
   },
 
   addFormField: function (type) {
@@ -318,7 +320,7 @@ const App = {
   },
 
   prepareAddForm: function () {
-    this.editingRecipeId = null;
+    this.editingRecipeId = null; // ✅ Explicitly set to null
     document.getElementById("form-title").textContent = "Add New Recipe";
     this.resetForm();
   },
@@ -379,21 +381,43 @@ const App = {
     }
 
     const formData = this.getFormData();
-    const completeRecipeData = {
-      ...formData,
-      id: this.editingRecipeId || Utils.generateId(),
-      createdAt: new Date().toISOString(),
-      imageUrl: formData.imageUrl || null,
-    };
 
+    // ✅ DEBUG LINES ADD KARO
+    console.log("🔄 Form submitted, editing ID:", this.editingRecipeId);
+    console.log("📝 Form data:", formData);
+
+    let completeRecipeData;
     let success = false;
 
     if (this.editingRecipeId) {
-      completeRecipeData.id = this.editingRecipeId;
+      // ✅ EDIT MODE - Existing recipe update karo
+      const existingRecipe = Storage.getRecipe(this.editingRecipeId);
+      if (!existingRecipe) {
+        Utils.showNotification("Recipe not found for editing", "error");
+        return;
+      }
+
+      completeRecipeData = {
+        ...existingRecipe, // ✅ Existing data retain karo
+        ...formData, // ✅ New form data
+        id: this.editingRecipeId, // ✅ Same ID rahega
+        // createdAt unchanged rahega
+      };
+
+      console.log("📤 Sending to update:", completeRecipeData);
       success = Storage.updateRecipe(completeRecipeData);
     } else {
+      // ✅ ADD MODE - New recipe
+      completeRecipeData = {
+        ...formData,
+        id: Utils.generateId(),
+        createdAt: new Date().toISOString(),
+        imageUrl: formData.imageUrl || null,
+      };
       success = Storage.addRecipe(completeRecipeData);
     }
+
+    console.log("💾 Save result:", success);
 
     if (success) {
       const message = this.editingRecipeId
@@ -408,6 +432,11 @@ const App = {
         this.resetForm();
         this.editingRecipeId = null;
       }, 800);
+    } else {
+      Utils.showNotification(
+        "Failed to save recipe. Check console for details.",
+        "error"
+      );
     }
   },
 
