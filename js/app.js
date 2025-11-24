@@ -9,7 +9,7 @@ const App = {
     this.setupFooterLinks();
     this.setupRealTimeValidation();
     this.setupClearFilters();
-    this.setupTimeFilter(); // ✅ ADDED: Time filter setup
+    this.setupTimeFilter();
   },
 
   setupEventListeners: function () {
@@ -60,7 +60,7 @@ const App = {
       if (clearFiltersBtn) {
         clearFiltersBtn.addEventListener("click", function () {
           timeFilter.value = "";
-          RecipeManager.handleSearchAndFilter(); // ✅ Automatically refresh
+          RecipeManager.handleSearchAndFilter();
         });
       }
     }
@@ -92,16 +92,14 @@ const App = {
     }
 
     // Clear time filter
-    const timeFilter = document.getElementById("timeFilter"); // ✅ CORRECTED ID
+    const timeFilter = document.getElementById("timeFilter");
     if (timeFilter) {
       timeFilter.value = "";
     }
 
-    // Refresh recipes with cleared filters
     RecipeManager.currentRecipes = Storage.getRecipes();
-    RecipeManager.handleSearchAndFilter(); // ✅ Use handleSearchAndFilter instead of renderRecipes
+    RecipeManager.handleSearchAndFilter();
 
-    // Show success notification
     Utils.showNotification("All filters cleared!", "success");
 
     // Add visual feedback
@@ -277,7 +275,6 @@ const App = {
       // ✅ ONLY reset form if NOT in edit mode
       this.prepareAddForm();
     }
-    // Agar editingRecipeId hai, to form reset mat karo
   },
 
   addFormField: function (type) {
@@ -465,7 +462,7 @@ const App = {
     if (prepTime === "" || prepTime < 0) {
       this.showError(
         "prep-time",
-        "Please enter a valid prep time (0 or more minutes)"
+        "Prep Time * is required (0 or more minutes)"
       );
       isValid = false;
     }
@@ -546,14 +543,20 @@ const App = {
     }
   },
 
-  getFormData: function () {
+  getFormData: function (isEditForm = false) {
+    const prefix = isEditForm ? "edit-" : "";
+
     return {
-      title: document.getElementById("title").value.trim(),
-      description: document.getElementById("description").value.trim(),
-      prepTime: parseInt(document.getElementById("prep-time").value),
-      cookTime: parseInt(document.getElementById("cook-time").value),
-      difficulty: document.getElementById("difficulty").value,
-      imageUrl: document.getElementById("image-url").value.trim() || null,
+      title: document.getElementById(`${prefix}title`)?.value.trim() || "",
+      description:
+        document.getElementById(`${prefix}description`)?.value.trim() || "",
+      prepTime:
+        parseInt(document.getElementById(`${prefix}prep-time`)?.value) || 0,
+      cookTime:
+        parseInt(document.getElementById(`${prefix}cook-time`)?.value) || 0,
+      difficulty:
+        document.getElementById(`${prefix}difficulty`)?.value || "easy",
+      imageUrl: document.getElementById(`${prefix}image-url`)?.value || "",
       ingredients: this.getIngredients(),
       instructions: this.getInstructions(),
     };
@@ -786,4 +789,19 @@ function safeRefresh() {
   console.log("Refreshing without clearing data...");
   RecipeManager.init();
   console.log("Recipes loaded:", RecipeManager.currentRecipes.length);
+}
+function goBackToHome() {
+  window.location.href = "index.html";
+}
+function goBackToHome() {
+  // Hide detail
+  document.getElementById("detail").style.display = "none";
+
+  // Show home
+  document.getElementById("home").style.display = "block";
+
+  // Refresh content
+  setTimeout(() => {
+    RecipeManager.renderRecipes(RecipeManager.currentRecipes);
+  }, 100);
 }

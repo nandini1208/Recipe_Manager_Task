@@ -101,8 +101,14 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label for="prep-time">Prep Time (minutes)</label>
-              <input type="number" id="prep-time" min="0" value="0" />
+              <label for="prep-time">Prep Time *</label>
+              <input
+                type="number"
+                id="prep-time"
+                placeholder="Enter prep time in minutes"
+                required
+                min="0"
+              />
               <div class="error-message" id="prep-time-error"></div>
             </div>
 
@@ -132,7 +138,11 @@
 
           <div class="form-group">
             <label for="image-url">Image URL (optional)</label>
-            <input type="url" id="image-url" />
+            <input
+              type="url"
+              id="image-url"
+              placeholder="Image URL (optional)"
+            />
             <div class="error-message" id="image-url-error"></div>
           </div>
 

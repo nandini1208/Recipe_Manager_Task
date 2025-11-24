@@ -85,7 +85,8 @@ const Storage = {
         prepTime: 15,
         cookTime: 20,
         difficulty: "Medium",
-        imageUrl: "images/img.jpg",
+        imageUrl:
+          "https://www.indianveggiedelight.com/wp-content/uploads/2023/01/white-sauce-pasta-1.jpg",
         ingredients: [
           "250g pasta (penne, fusilli, or similar)",
           "2 litres water",
@@ -127,7 +128,8 @@ const Storage = {
         cookTime: 10,
         totalTime: 20,
         difficulty: "Easy",
-        imageUrl: "images/vegetables-stir-fry.jpg",
+        imageUrl:
+          "https://images.themodernproper.com/production/posts/VegetableStirFry_9.jpg?w=1200&h=1200&q=60&fm=jpg&fit=crop&dm=1703377301&s=79d95f7318643d92c30863f226d5eb8e",
         ingredients: [
           "2 cups mixed vegetables",
           "2 tablespoons vegetable oil",
@@ -153,7 +155,8 @@ const Storage = {
         cookTime: 12,
         totalTime: 27,
         difficulty: "Easy",
-        imageUrl: "images/chocolate-chip-cookie.jpg",
+        imageUrl:
+          "https://images.aws.nestle.recipes/resized/5b069c3ed2feea79377014f6766fcd49_Original_NTH_Chocolate_Chip_Cookie_448_448.jpg",
         ingredients: [
           "2 ¼ cups all-purpose flour",
           "1 teaspoon baking soda",
@@ -183,7 +186,8 @@ const Storage = {
         cookTime: 35,
         totalTime: 50,
         difficulty: "Medium",
-        imageUrl: "images/cake.jpg",
+        imageUrl:
+          "https://api.floraindia.com/upload/x8i2a54tpp1754035623750.webp",
         ingredients: [
           "1 cup all-purpose flour",
           "1/2 cup cocoa powder",
@@ -217,7 +221,8 @@ const Storage = {
         cookTime: 15,
         totalTime: 25,
         difficulty: "Medium",
-        imageUrl: "images/dhokla.jpg",
+        imageUrl:
+          "https://rakskitchen.net/wp-content/uploads/2011/09/khaman-besan.jpg",
         ingredients: [
           "1 cup besan (gram flour)",
           "1 cup water",
@@ -245,74 +250,6 @@ const Storage = {
 
       {
         id: Utils.generateId(),
-        title: "Veg Hakka Noodles",
-        description:
-          "Street-style hakka noodles tossed with veggies, soy sauce and pepper.",
-        prepTime: 10,
-        cookTime: 15,
-        totalTime: 25,
-        difficulty: "Medium",
-        imageUrl: "images/noodles.jpg",
-        ingredients: [
-          "200g hakka noodles",
-          "1 tbsp oil",
-          "1 tbsp chopped garlic",
-          "1/2 cup sliced onion",
-          "1/2 cup cabbage",
-          "1/2 cup capsicum",
-          "1/4 cup carrot",
-          "2 tbsp soy sauce",
-          "1 tbsp vinegar",
-          "1 tsp green chilli sauce",
-          "1/2 tsp black pepper",
-          "Salt to taste",
-          "Spring onions (for garnish)",
-        ],
-        instructions: [
-          "Boil noodles and rinse with cold water.",
-          "Heat oil and sauté garlic.",
-          "Add onion, cabbage, capsicum and carrot; cook on high flame.",
-          "Add soy sauce, vinegar, chilli sauce and pepper.",
-          "Add noodles and toss well.",
-          "Garnish with spring onions before serving.",
-        ],
-        createdAt: new Date().toISOString(),
-      },
-
-      {
-        id: Utils.generateId(),
-        title: "Veg Salad",
-        description:
-          "Healthy, crunchy and refreshing salad with lemon dressing.",
-        prepTime: 8,
-        cookTime: 0,
-        totalTime: 8,
-        difficulty: "Easy",
-        imageUrl: "images/salad.jpg",
-        ingredients: [
-          "1 cup chopped cucumber",
-          "1 cup chopped tomato",
-          "1/2 cup sliced onion",
-          "1/2 cup carrot",
-          "1/2 cup capsicum",
-          "1/2 cup boiled sweet corn",
-          "1 tbsp lemon juice",
-          "1 tbsp olive oil",
-          "Salt to taste",
-          "1/2 tsp black pepper",
-          "1/2 tsp chaat masala",
-        ],
-        instructions: [
-          "Add all chopped veggies into a mixing bowl.",
-          "Whisk lemon juice, olive oil, salt, pepper and chaat masala to make dressing.",
-          "Pour dressing over veggies.",
-          "Toss gently and serve fresh.",
-        ],
-        createdAt: new Date().toISOString(),
-      },
-
-      {
-        id: Utils.generateId(),
         title: "Veg Cheese Sandwich",
         description:
           "Quick and tasty cheesy vegetable sandwich perfect for breakfast.",
@@ -320,7 +257,8 @@ const Storage = {
         cookTime: 5,
         totalTime: 15,
         difficulty: "Easy",
-        imageUrl: "images/sandwich.jpg",
+        imageUrl:
+          "https://images.herzindagi.info/image/2021/Nov/cheese-loaded-sandwiches.jpg",
         ingredients: [
           "4 bread slices",
           "1/2 cup sliced cucumber",
@@ -352,7 +290,8 @@ const Storage = {
         cookTime: 35,
         totalTime: 60,
         difficulty: "Hard",
-        imageUrl: "images/paneer-butter-masala.jpg",
+        imageUrl:
+          "https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-5.jpg",
         ingredients: [
           "250g paneer cubes",
           "3 tomatoes",
@@ -390,7 +329,8 @@ const Storage = {
         cookTime: 60,
         totalTime: 100,
         difficulty: "Hard",
-        imageUrl: "images/biryani.jpg",
+        imageUrl:
+          "https://c.ndtvimg.com/2020-12/gsb6apq_biryani_625x300_23_December_20.jpg",
         ingredients: [
           "500g chicken",
           "2 cups basmati rice",

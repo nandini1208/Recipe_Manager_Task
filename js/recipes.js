@@ -35,7 +35,6 @@ const RecipeManager = {
     }
   },
 
-  // UPDATED TIME FILTER - Clear logic
   handleSearchAndFilter: function () {
     const searchTerm = document
       .getElementById("search-input")
@@ -59,13 +58,11 @@ const RecipeManager = {
       );
     }
 
-    // ✅ UPDATED TIME FILTER - Clear logic
+    // Time filter
     if (timeFilterValue) {
       let maxMinutes = 0;
 
-      // Convert "1 hr 30 min", "1h30m", "90min", etc. to total minutes
       if (timeFilterValue.includes("hr") || timeFilterValue.includes("h")) {
-        // Extract hours and minutes
         const hoursMatch = timeFilterValue.match(/(\d+(\.\d+)?)\s*h(r)?/);
         const minsMatch = timeFilterValue.match(/(\d+)\s*m(in)?/);
 
@@ -73,29 +70,21 @@ const RecipeManager = {
         const minutes = minsMatch ? parseInt(minsMatch[1]) : 0;
 
         maxMinutes = hours * 60 + minutes;
-        console.log(`Converted: ${hours}h ${minutes}m → ${maxMinutes} minutes`);
       } else {
-        // Simple number input (assume minutes)
         maxMinutes = parseInt(timeFilterValue);
       }
 
-      // Apply filter
       if (!isNaN(maxMinutes) && maxMinutes > 0) {
         filtered = filtered.filter((recipe) => {
           const totalTime = recipe.prepTime + recipe.cookTime;
           return totalTime <= maxMinutes;
         });
-
-        console.log(
-          `Showing recipes under ${maxMinutes} minutes (${Math.floor(
-            maxMinutes / 60
-          )}h ${maxMinutes % 60}m)`
-        );
       }
     }
 
     this.renderRecipes(filtered);
   },
+
   clearFilters: function () {
     document.getElementById("search-input").value = "";
     document.getElementById("difficulty-filter").value = "all";
@@ -125,13 +114,7 @@ const RecipeManager = {
                 (recipe) => `
                 <div class="recipe-card">
                     <div class="recipe-image-container">
-                        <img src="${
-                          recipe.imageUrl ||
-                          "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                        }" 
-                             alt="${recipe.title}" 
-                             class="recipe-image"
-                             onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">
+                        ${this.getImageHTML(recipe)}
                     </div>
                     <div class="recipe-content">
                         <h3 class="recipe-title">${recipe.title}</h3>
@@ -182,6 +165,33 @@ const RecipeManager = {
     `;
 
     this.addRecipeCardEventListeners();
+  },
+
+  // NEW: Image handling function
+  getImageHTML: function (recipe) {
+    const hasImage = recipe.imageUrl && recipe.imageUrl.trim() !== "";
+    const defaultImage =
+      "https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80";
+
+    if (hasImage) {
+      return `
+        <img src="${recipe.imageUrl}" 
+             alt="${recipe.title}" 
+             class="recipe-image"
+             onerror="this.classList.add('image-error'); this.nextElementSibling.classList.remove('hidden')">
+        <div class="image-placeholder hidden">
+          <span class="placeholder-icon">📷</span>
+          <span class="placeholder-text">No Image</span>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="image-placeholder">
+          <span class="placeholder-icon">📷</span>
+          <span class="placeholder-text">No Image</span>
+        </div>
+      `;
+    }
   },
 
   addRecipeCardEventListeners: function () {
