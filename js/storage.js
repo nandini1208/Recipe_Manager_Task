@@ -85,8 +85,7 @@ const Storage = {
         prepTime: 15,
         cookTime: 20,
         difficulty: "Medium",
-        imageUrl:
-          "https://www.indianveggiedelight.com/wp-content/uploads/2023/01/white-sauce-pasta-1.jpg",
+        imageUrl: "images/img1.jpg",
         ingredients: [
           "250g pasta (penne, fusilli, or similar)",
           "2 litres water",
@@ -128,8 +127,7 @@ const Storage = {
         cookTime: 10,
         totalTime: 20,
         difficulty: "Easy",
-        imageUrl:
-          "https://images.themodernproper.com/production/posts/VegetableStirFry_9.jpg?w=1200&h=1200&q=60&fm=jpg&fit=crop&dm=1703377301&s=79d95f7318643d92c30863f226d5eb8e",
+        imageUrl: "images/img2.png",
         ingredients: [
           "2 cups mixed vegetables",
           "2 tablespoons vegetable oil",
@@ -155,8 +153,7 @@ const Storage = {
         cookTime: 12,
         totalTime: 27,
         difficulty: "Easy",
-        imageUrl:
-          "https://images.aws.nestle.recipes/resized/5b069c3ed2feea79377014f6766fcd49_Original_NTH_Chocolate_Chip_Cookie_448_448.jpg",
+        imageUrl: "images/img3.jpg",
         ingredients: [
           "2 ¼ cups all-purpose flour",
           "1 teaspoon baking soda",
@@ -186,8 +183,7 @@ const Storage = {
         cookTime: 35,
         totalTime: 50,
         difficulty: "Medium",
-        imageUrl:
-          "https://api.floraindia.com/upload/x8i2a54tpp1754035623750.webp",
+        imageUrl: "images/img4.webp",
         ingredients: [
           "1 cup all-purpose flour",
           "1/2 cup cocoa powder",
@@ -215,8 +211,7 @@ const Storage = {
       {
         id: Utils.generateId(),
         title: "Dhokla",
-        description:
-          "Soft, spongy, and fluffy Gujarati dhokla made quickly using besan and eno.",
+        description: "images/img5.jpg",
         prepTime: 10,
         cookTime: 15,
         totalTime: 25,
@@ -257,8 +252,7 @@ const Storage = {
         cookTime: 5,
         totalTime: 15,
         difficulty: "Easy",
-        imageUrl:
-          "https://images.herzindagi.info/image/2021/Nov/cheese-loaded-sandwiches.jpg",
+        imageUrl: "images/img6.jpg",
         ingredients: [
           "4 bread slices",
           "1/2 cup sliced cucumber",
@@ -290,8 +284,7 @@ const Storage = {
         cookTime: 35,
         totalTime: 60,
         difficulty: "Hard",
-        imageUrl:
-          "https://www.vegrecipesofindia.com/wp-content/uploads/2020/01/paneer-butter-masala-5.jpg",
+        imageUrl: "images/img7.webp",
         ingredients: [
           "250g paneer cubes",
           "3 tomatoes",
@@ -329,8 +322,7 @@ const Storage = {
         cookTime: 60,
         totalTime: 100,
         difficulty: "Hard",
-        imageUrl:
-          "https://c.ndtvimg.com/2020-12/gsb6apq_biryani_625x300_23_December_20.jpg",
+        imageUrl: "images/img8.png",
         ingredients: [
           "500g chicken",
           "2 cups basmati rice",
