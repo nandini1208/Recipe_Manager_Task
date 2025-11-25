@@ -617,95 +617,135 @@ const App = {
       return;
     }
 
-    const detailContainer = document.getElementById("recipe-detail");
     const totalTime = recipe.prepTime + recipe.cookTime;
 
-    detailContainer.innerHTML = `
-      <div class="recipe-detail-container">
-        <div class="recipe-detail-header">
-          ${
-            recipe.imageUrl
-              ? `<img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-detail-image"
-                   onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'">`
-              : `<div class="recipe-detail-image" style="background-color: #e9ecef; display: flex; align-items: center; justify-content: center; color: #6c757d;">
-                  <span>No Image Available</span>
-                </div>`
-          }
-          <h2 class="recipe-detail-title">${recipe.title}</h2>
-        </div>
-        
-        <div class="recipe-detail-meta">
-          <div class="meta-item">
-            <div class="meta-label">Prep Time</div>
-            <div class="meta-value">${Utils.formatTime(recipe.prepTime)}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">Cook Time</div>
-            <div class="meta-value">${Utils.formatTime(recipe.cookTime)}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">Total Time</div>
-            <div class="meta-value">${Utils.formatTime(totalTime)}</div>
-          </div>
-          <div class="meta-item">
-            <div class="meta-label">Difficulty</div>
-            <div class="meta-value">
-              <span class="difficulty ${recipe.difficulty.toLowerCase()}">${
+    // Remove existing modal if any
+    const existingModal = document.querySelector(".recipe-modal-overlay");
+    if (existingModal) {
+      existingModal.remove();
+    }
+
+    // Create modal HTML
+    const modalHTML = `
+        <div class="recipe-modal-overlay">
+            <div class="recipe-modal-container">
+                <div class="recipe-modal-header">
+                    <button class="recipe-modal-close">&times;</button>
+                    ${
+                      recipe.imageUrl
+                        ? `<img src="${recipe.imageUrl}" alt="${recipe.title}" class="recipe-modal-image"
+                                 onerror="this.src='https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'">`
+                        : `<div class="recipe-modal-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;">
+                                <span>📷 No Image Available</span>
+                              </div>`
+                    }
+                    <h2 class="recipe-modal-title">${recipe.title}</h2>
+                </div>
+                
+                <div class="recipe-modal-content">
+                    <div class="recipe-modal-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Prep Time</div>
+                            <div class="meta-value">${Utils.formatTime(
+                              recipe.prepTime
+                            )}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Cook Time</div>
+                            <div class="meta-value">${Utils.formatTime(
+                              recipe.cookTime
+                            )}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Total Time</div>
+                            <div class="meta-value">${Utils.formatTime(
+                              totalTime
+                            )}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Difficulty</div>
+                            <div class="meta-value">
+                                <span class="difficulty ${recipe.difficulty.toLowerCase()}">${
       recipe.difficulty
     }</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recipe-modal-body">
+                        <div class="recipe-modal-section">
+                            <h3>Description</h3>
+                            <p>${recipe.description}</p>
+                        </div>
+
+                        <div class="recipe-modal-section">
+                            <h3>Ingredients</h3>
+                            <ul class="ingredients-list">
+                                ${recipe.ingredients
+                                  .map((ingredient) => `<li>${ingredient}</li>`)
+                                  .join("")}
+                            </ul>
+                        </div>
+
+                        <div class="recipe-modal-section">
+                            <h3>Instructions</h3>
+                            <ol class="instructions-list">
+                                ${recipe.instructions
+                                  .map(
+                                    (instruction, index) => `
+                                    <li>
+                                        <div class="instruction-number">${
+                                          index + 1
+                                        }</div>
+                                        <div class="instruction-text">${instruction}</div>
+                                    </li>
+                                `
+                                  )
+                                  .join("")}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="recipe-modal-actions">
+                    <button class="btn btn-secondary edit-recipe-detail" data-id="${
+                      recipe.id
+                    }">Edit Recipe</button>
+                    <button class="btn btn-danger delete-recipe-detail" data-id="${
+                      recipe.id
+                    }">Delete Recipe</button>
+                </div>
             </div>
-          </div>
         </div>
-
-        <div class="recipe-detail-content">
-          <div class="recipe-section">
-            <h3>Description</h3>
-            <p>${recipe.description}</p>
-          </div>
-
-          <div class="recipe-section">
-            <h3>Ingredients</h3>
-            <ul class="ingredients-list">
-              ${recipe.ingredients
-                .map((ingredient) => `<li>${ingredient}</li>`)
-                .join("")}
-            </ul>
-          </div>
-
-          <div class="recipe-section">
-            <h3>Instructions</h3>
-            <ol class="instructions-list">
-              ${recipe.instructions
-                .map(
-                  (instruction, index) => `
-                <li>
-                  <div class="instruction-number">${index + 1}</div>
-                  <div class="instruction-text">${instruction}</div>
-                </li>`
-                )
-                .join("")}
-            </ol>
-          </div>
-        </div>
-
-        <div class="recipe-detail-actions">
-          <button class="btn btn-primary back-to-home">Back to Recipes</button>
-          <button class="btn btn-secondary edit-recipe-detail" data-id="${
-            recipe.id
-          }">Edit Recipe</button>
-          <button class="btn btn-danger delete-recipe-detail" data-id="${
-            recipe.id
-          }">Delete Recipe</button>
-        </div>
-      </div>
     `;
 
-    const editBtn = detailContainer.querySelector(".edit-recipe-detail");
-    const deleteBtn = detailContainer.querySelector(".delete-recipe-detail");
+    // Add modal to page
+    document.body.insertAdjacentHTML("beforeend", modalHTML);
 
+    // Add event listeners
+    const modal = document.querySelector(".recipe-modal-overlay");
+    const closeBtn = document.querySelector(".recipe-modal-close");
+    const editBtn = document.querySelector(".edit-recipe-detail");
+    const deleteBtn = document.querySelector(".delete-recipe-detail");
+
+    // Close modal events
+    const closeModal = () => modal.remove();
+
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // Escape key to close
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    // Edit and delete buttons
     if (editBtn) {
       editBtn.addEventListener("click", (e) => {
         const recipeId = e.target.getAttribute("data-id");
+        closeModal();
         this.prepareEditForm(recipeId);
       });
     }
@@ -713,32 +753,9 @@ const App = {
     if (deleteBtn) {
       deleteBtn.addEventListener("click", (e) => {
         const recipeId = e.target.getAttribute("data-id");
+        closeModal();
         this.deleteRecipe(recipeId);
       });
-    }
-
-    this.navigateTo("detail");
-  },
-
-  deleteRecipe: function (recipeId) {
-    const recipe = Storage.getRecipe(recipeId);
-    if (!recipe) return;
-
-    if (
-      confirm(
-        `Are you sure you want to delete "${recipe.title}"? This action cannot be undone.`
-      )
-    ) {
-      if (Storage.deleteRecipe(recipeId)) {
-        Utils.showNotification("Recipe deleted successfully", "success");
-        RecipeManager.currentRecipes = Storage.getRecipes();
-
-        if (this.currentPage === "detail") {
-          this.navigateTo("home");
-        } else {
-          RecipeManager.renderRecipes(RecipeManager.currentRecipes);
-        }
-      }
     }
   },
 };

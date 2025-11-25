@@ -85,7 +85,7 @@ const Storage = {
         prepTime: 15,
         cookTime: 20,
         difficulty: "Medium",
-        imageUrl: "images/img1.jpg",
+        imageUrl: "./images/img1.jpg",
         ingredients: [
           "250g pasta (penne, fusilli, or similar)",
           "2 litres water",
@@ -127,7 +127,7 @@ const Storage = {
         cookTime: 10,
         totalTime: 20,
         difficulty: "Easy",
-        imageUrl: "images/img2.png",
+        imageUrl: "./images/img2.png",
         ingredients: [
           "2 cups mixed vegetables",
           "2 tablespoons vegetable oil",
@@ -153,7 +153,7 @@ const Storage = {
         cookTime: 12,
         totalTime: 27,
         difficulty: "Easy",
-        imageUrl: "images/img3.jpg",
+        imageUrl: "./images/img3.jpg",
         ingredients: [
           "2 ¼ cups all-purpose flour",
           "1 teaspoon baking soda",
@@ -183,7 +183,7 @@ const Storage = {
         cookTime: 35,
         totalTime: 50,
         difficulty: "Medium",
-        imageUrl: "images/img4.webp",
+        imageUrl: "./images/img4.webp",
         ingredients: [
           "1 cup all-purpose flour",
           "1/2 cup cocoa powder",
@@ -211,13 +211,13 @@ const Storage = {
       {
         id: Utils.generateId(),
         title: "Dhokla",
-        description: "images/img5.jpg",
+        description:
+          "Soft, fluffy and spongy Gujarati dhokla made from fermented batter, steamed to perfection and tempered with mustard seeds and curry leaves. A healthy, protein-rich snack that's light yet satisfying!",
         prepTime: 10,
         cookTime: 15,
         totalTime: 25,
         difficulty: "Medium",
-        imageUrl:
-          "https://rakskitchen.net/wp-content/uploads/2011/09/khaman-besan.jpg",
+        imageUrl: "./images/img5.jpg",
         ingredients: [
           "1 cup besan (gram flour)",
           "1 cup water",
@@ -252,7 +252,7 @@ const Storage = {
         cookTime: 5,
         totalTime: 15,
         difficulty: "Easy",
-        imageUrl: "images/img6.jpg",
+        imageUrl: "./images/img6.jpg",
         ingredients: [
           "4 bread slices",
           "1/2 cup sliced cucumber",
@@ -284,7 +284,7 @@ const Storage = {
         cookTime: 35,
         totalTime: 60,
         difficulty: "Hard",
-        imageUrl: "images/img7.webp",
+        imageUrl: "./images/img7.webp",
         ingredients: [
           "250g paneer cubes",
           "3 tomatoes",
@@ -322,7 +322,7 @@ const Storage = {
         cookTime: 60,
         totalTime: 100,
         difficulty: "Hard",
-        imageUrl: "images/img8.png",
+        imageUrl: "./images/img8.png",
         ingredients: [
           "500g chicken",
           "2 cups basmati rice",
